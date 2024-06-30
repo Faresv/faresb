@@ -1,0 +1,103 @@
+import random
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+def generate_random_prime(bit_length):
+    while True:
+
+        candidate = random.getrandbits(bit_length)
+
+        candidate |= (1 << bit_length - 1) | 1
+
+        if is_prime(candidate):
+            return candidate
+
+
+bit_length = 32 
+random_prime = generate_random_prime(bit_length)
+print("Random prime number of bit length {}: {}".format(bit_length, random_prime))
+
+
+
+
+
+
+
+import random
+
+def gcd_extended(a, b):
+    if a == 0:
+        return b, 0, 1
+    gcd, x1, y1 = gcd_extended(b % a, a)
+    x = y1 - (b // a) * x1
+    y = x1
+    return gcd, x, y
+
+def generate_rsa_keys(bit_length):
+    
+    p = generate_random_prime(bit_length)
+    q = generate_random_prime(bit_length)
+
+   
+    n = p * q
+
+    
+    phi_n = (p - 1) * (q - 1)
+
+    
+    e = random.randint(2, phi_n - 1)
+    while gcd_extended(e, phi_n)[0] != 1:
+        e = random.randint(2, phi_n - 1)
+
+    
+    _, d, _ = gcd_extended(e, phi_n)
+    d = d % phi_n
+    if d < 0:
+        d += phi_n
+
+    
+    return (n, e), (n, d)
+
+def generate_random_prime(bit_length):
+    while True:
+       
+        candidate = random.getrandbits(bit_length)
+
+        
+        candidate |= (1 << bit_length - 1) | 1
+
+        
+        if is_prime(candidate):
+            return candidate
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+:
+bit_length = 64 
+public_key, private_key = generate_rsa_keys(bit_length)
+print("Public key:", public_key)
+print("Private key:", private_key)
